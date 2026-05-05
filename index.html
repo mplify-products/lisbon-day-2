@@ -18,7 +18,8 @@
   --light:    #F0F1F2;
   --white:    #FFFFFF;
   /* Same pixel height on all session detail slides (not % of grid — subtitle varies by slide). */
-  --session-detail-card-height: clamp(300px, 46vh, 460px);
+  /* 40% shorter than previous clamp(300px, 46vh, 460px) */
+  --session-detail-card-height: clamp(180px, 28vh, 276px);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -285,6 +286,8 @@ body {
 #slide-2 .session-topics { gap: 3px; }
 #slide-2 .session-topics li { font-size: 11.5px; line-height: 1.25; }
 #slide-2 .tz-multi { font-size: 8.5px; line-height: 1.2; }
+/* Reduce whitespace between topics and divider line */
+#slide-2 .time-block { margin-top: 12px; }
 
 #slide-3 .slide-subtitle,
 #slide-4 .slide-subtitle,
@@ -304,7 +307,8 @@ body {
 #slide-3 .detail-grid,
 #slide-4 .detail-grid,
 #slide-5 .detail-grid {
-  align-items: end;
+  align-items: start;
+  margin-top: 20px;
 }
 #slide-3 .detail-card,
 #slide-4 .detail-card,
@@ -407,7 +411,6 @@ body {
 
 <div id="sidebar">
   <div id="sidebar-logo">
-    <img src="./mplify-sidebar-logo.png" alt="Mplify" class="sidebar-logo-img" />
     <div class="logo-sub text-center">Member Summit · Lisbon 2026</div>
   </div>
   <div class="chapter-item active" onclick="goTo(0)">
