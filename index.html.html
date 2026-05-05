@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Member Summit — Lisbon, 11 Jun 2026</title>
+<link href="https://fonts.googleapis.com/css2?family=Sansation:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy:     #000136;
+  --blue:     #3D7BC7;
+  --orange:   #FD7801;
+  --dkblue:   #244E9E;
+  --yellow:   #FEBF10;
+  --gray:     #A1A1A1;
+  --purple:   #790072;
+  --charcoal: #555555;
+  --light:    #F0F1F2;
+  --white:    #FFFFFF;
+  /* Same pixel height on all session detail slides (not % of grid — subtitle varies by slide). */
+  --session-detail-card-height: clamp(300px, 46vh, 460px);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #1a1a2e;
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+  color: var(--navy);
+}
+
+/* SIDEBAR */
+#sidebar {
+  width: 220px;
+  min-width: 220px;
+  background: var(--navy);
+  color: white;
+  display: flex;
+  flex-direction: column;
+  padding: 20px 0;
+  overflow-y: auto;
+  z-index: 10;
+}
+#sidebar-logo {
+  padding: 16px 20px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.1);
+  margin-bottom: 12px;
+}
+.sidebar-logo-img {
+  width: 90px;
+  display: block;
+  margin: 0 auto 8px;
+}
+.text-center { text-align: center; }
+.logo-text {
+  font-family: 'Sansation', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+}
+.logo-sub {
+  font-size: 10px;
+  color: rgba(255,255,255,0.4);
+  margin-top: 3px;
+}
+.chapter-item {
+  padding: 8px 20px;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 11.5px;
+  font-weight: 400;
+  color: rgba(255,255,255,0.55);
+  border-left: 3px solid transparent;
+  transition: all 0.2s;
+  line-height: 1.3;
+}
+.chapter-item:hover {
+  color: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.05);
+}
+.chapter-item.active {
+  color: var(--orange);
+  border-left-color: var(--orange);
+  background: rgba(253,120,1,0.08);
+  font-weight: 600;
+}
+.chapter-number {
+  display: inline-block;
+  width: 16px;
+  font-size: 10px;
+  opacity: 0.6;
+  margin-right: 4px;
+}
+
+/* MAIN */
+#main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+#counter {
+  position: absolute;
+  top: 14px;
+  right: 20px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  color: var(--gray);
+  z-index: 100;
+  background: rgba(255,255,255,0.9);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+#stage {
+  flex: 1;
+  position: relative;
+  overflow: hidden;
+  background: var(--light);
+}
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  background: var(--white);
+  padding: 52px 64px 44px;
+  overflow: hidden;
+}
+.slide.active { display: flex; flex-direction: column; }
+
+/* NAV */
+.nav-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 40px; height: 40px;
+  background: rgba(255,255,255,0.95);
+  border: none;
+  border-radius: 50%;
+  cursor: pointer;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.15);
+  color: var(--navy);
+  transition: all 0.2s;
+}
+.nav-arrow:hover { background: var(--orange); color: white; }
+#prev { left: 12px; }
+#next { right: 12px; }
+
+.gradient-bar {
+  height: 6px;
+  background: linear-gradient(to right, var(--orange), var(--blue), var(--yellow));
+  flex-shrink: 0;
+}
+
+/* SHARED */
+.slide-eyebrow {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--orange);
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  margin-bottom: 10px;
+}
+.slide-title {
+  font-family: 'Sansation', sans-serif;
+  font-size: 34px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+.slide-title span { color: var(--blue); }
+.slide-subtitle {
+  font-size: 14px;
+  color: var(--charcoal);
+  margin-bottom: 24px;
+}
+
+/* PILLS */
+.pill-row { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+.pill {
+  display: inline-flex; align-items: center; gap: 6px;
+  border: 1.5px solid var(--navy);
+  color: var(--navy);
+  border-radius: 999px;
+  padding: 5px 14px;
+  font-size: 12px; font-weight: 600;
+  white-space: nowrap;
+}
+.pill.orange { background: var(--orange); border-color: var(--orange); color: #fff; }
+
+/* SESSION CARDS */
+.sessions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  flex: 1;
+}
+.session-card {
+  background: var(--light);
+  border-radius: 10px;
+  border: 1.5px solid #dde1e8;
+  padding: 22px 20px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+}
+.session-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+}
+.s1::before { background: var(--orange); }
+.s2::before { background: var(--blue); }
+.s3::before { background: var(--dkblue); }
+
+.session-num {
+  font-family: 'Sansation', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1;
+}
+.s1 .session-num { color: var(--orange); }
+.s2 .session-num { color: var(--blue); }
+.s3 .session-num { color: var(--dkblue); }
+
+.session-header { display: flex; align-items: flex-start; gap: 10px; }
+.session-title {
+  font-family: 'Sansation', sans-serif;
+  font-size: 15px; font-weight: 700;
+  color: var(--navy); line-height: 1.25;
+  padding-top: 4px;
+}
+.session-title-link { cursor: pointer; text-decoration: underline; text-underline-offset: 2px; }
+.topic-label {
+  font-size: 10px; font-weight: 700;
+  text-transform: uppercase; letter-spacing: 1.8px;
+  margin-bottom: 7px; color: var(--gray);
+}
+.session-topics { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.session-topics li {
+  font-size: 12.5px; color: var(--charcoal);
+  padding-left: 13px; position: relative; line-height: 1.4;
+}
+.session-topics li::before {
+  content: '›'; position: absolute; left: 0; font-weight: 700;
+}
+.s1 .session-topics li::before { color: var(--orange); }
+.s2 .session-topics li::before { color: var(--blue); }
+.s3 .session-topics li::before { color: var(--dkblue); }
+
+.time-block { border-top: 1px solid #d0d5de; padding-top: 11px; margin-top: auto; }
+.time-lisbon {
+  font-size: 10px; font-weight: 700; color: var(--navy);
+  margin-bottom: 4px;
+}
+.time-range { display: block; margin-top: 4px; }
+.time-block .duration-badge {
+  display: inline-block;
+}
+.duration-badge {
+  font-size: 10px; font-weight: 600;
+  background: var(--navy); color: #fff;
+  border-radius: 4px; padding: 1px 6px;
+}
+.tz { font-size: 11px; color: var(--gray); margin-top: 3px; display: block; }
+.tz-multi { font-size: 9.5px; line-height: 1.35; }
+
+/* Slide 2 compact card layout */
+#slide-2 .slide-title { margin-bottom: 22px; }
+#slide-2 .sessions { flex: 0; align-items: stretch; margin-top: 18px; margin-bottom: auto; }
+#slide-2 .session-card { padding: 16px 16px 12px; gap: 8px; }
+#slide-2 .session-card { height: 360px; }
+#slide-2 .session-topics { gap: 3px; }
+#slide-2 .session-topics li { font-size: 11.5px; line-height: 1.25; }
+#slide-2 .tz-multi { font-size: 8.5px; line-height: 1.2; }
+
+#slide-3 .slide-subtitle,
+#slide-4 .slide-subtitle,
+#slide-5 .slide-subtitle {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+#slide-3 .slide-subtitle strong,
+#slide-4 .slide-subtitle strong,
+#slide-5 .slide-subtitle strong {
+  font-size: 21px; /* 14px * 1.5 */
+  line-height: 1.2;
+  display: block;
+}
+
+#slide-3 .detail-grid,
+#slide-4 .detail-grid,
+#slide-5 .detail-grid {
+  align-items: end;
+}
+#slide-3 .detail-card,
+#slide-4 .detail-card,
+#slide-5 .detail-card {
+  height: var(--session-detail-card-height);
+  overflow: auto;
+}
+
+/* Slides 3–5: 50% larger card typography */
+#slide-3 .detail-heading,
+#slide-4 .detail-heading,
+#slide-5 .detail-heading {
+  font-size: 15px; /* 10px * 1.5 */
+}
+#slide-3 .detail-topics li,
+#slide-4 .detail-topics li,
+#slide-5 .detail-topics li {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
+.footer-note {
+  margin-top: 14px; font-size: 10.5px; color: var(--gray);
+  border-top: 1px solid #e0e3e9; padding-top: 12px;
+}
+.detail-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; flex:1; }
+.detail-card {
+  background:var(--light);
+  border-radius:10px;
+  border:1.5px solid #dde1e8;
+  padding:20px 18px;
+}
+.detail-card-orange { border-top:3px solid var(--orange); }
+.detail-card-blue { border-top:3px solid var(--blue); }
+.detail-card-dkblue { border-top:3px solid var(--dkblue); }
+.detail-heading {
+  font-size:10px;
+  font-weight:700;
+  text-transform:uppercase;
+  letter-spacing:1.8px;
+  margin-bottom:12px;
+}
+.detail-heading-orange { color:var(--orange); }
+.detail-heading-blue { color:var(--blue); }
+.detail-heading-dkblue { color:var(--dkblue); }
+.detail-topics { gap:8px; }
+.detail-topics li { font-size:13px; color:var(--charcoal); padding-left:13px; }
+
+/* SLIDE 1 — COVER */
+#slide-1 { flex-direction: row; padding: 0; }
+.title-left {
+  flex: 1;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 60px 80px 60px 80px;
+}
+.title-right {
+  width: 272px;
+  background: var(--navy);
+  display: flex; flex-direction: column; justify-content: space-between;
+  padding: 40px 28px;
+}
+.eyebrow {
+  font-size: 11px; font-weight: 700; color: var(--orange);
+  text-transform: uppercase; letter-spacing: 2.5px; margin-bottom: 14px;
+}
+.title-main {
+  font-family: 'Sansation', sans-serif;
+  font-size: 54px; font-weight: 700;
+  color: var(--navy); line-height: 1.0; margin-bottom: 16px;
+}
+.title-detail { font-size: 14px; color: var(--charcoal); line-height: 1.7; margin-bottom: 28px; }
+.title-detail ul { margin: 8px 0 0 20px; padding: 0; }
+.title-detail li { margin: 2px 0; }
+.cover-meta { display: flex; flex-direction: column; gap: 10px; }
+.cover-meta-item {
+  display: flex; align-items: center; gap: 10px;
+  font-size: 13px; color: var(--navy); font-weight: 500;
+}
+.cover-meta-icon {
+  width: 30px; height: 30px; border-radius: 6px;
+  background: rgba(253,120,1,0.1);
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.panel-label {
+  font-size: 10px; font-weight: 700; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 2px; margin-bottom: 10px;
+}
+.panel-session { padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,0.08); }
+.panel-session:last-of-type { border-bottom: none; }
+.panel-num { font-size: 10px; font-weight: 700; color: var(--orange); margin-bottom: 3px; }
+.panel-title { font-size: 12px; font-weight: 600; color: rgba(255,255,255,0.9); line-height: 1.3; margin-bottom: 2px; }
+.panel-time { font-size: 10.5px; color: rgba(255,255,255,0.4); }
+.panel-logo {
+  font-family: 'Sansation', sans-serif;
+  font-size: 20px; font-weight: 700; color: rgba(255,255,255,0.85); letter-spacing: 1px;
+}
+</style>
+</head>
+<body>
+
+<div id="sidebar">
+  <div id="sidebar-logo">
+    <img src="./mplify-sidebar-logo.png" alt="Mplify" class="sidebar-logo-img" />
+    <div class="logo-sub text-center">Member Summit · Lisbon 2026</div>
+  </div>
+  <div class="chapter-item active" onclick="goTo(0)">
+    <span class="chapter-number">—</span> Summit Day 2
+  </div>
+  <div class="chapter-item" onclick="goTo(1)">
+    <span class="chapter-number">1</span> Mplify Synopsis
+  </div>
+  <div class="chapter-item" onclick="goTo(2)">
+    <span class="chapter-number">2</span> NaaS Federation
+  </div>
+  <div class="chapter-item" onclick="goTo(3)">
+    <span class="chapter-number">3</span> NaaS for AI
+  </div>
+  <div class="chapter-item" onclick="goTo(4)">
+    <span class="chapter-number">4</span> Agentic LSO
+  </div>
+</div>
+
+<div id="main">
+  <div id="counter">1 / 5</div>
+
+  <div id="stage">
+    <button class="nav-arrow" id="prev" onclick="prevSlide()">&#8249;</button>
+    <button class="nav-arrow" id="next" onclick="nextSlide()">&#8250;</button>
+
+    <!-- SLIDE 1: COVER -->
+    <div class="slide active" id="slide-1">
+      <div class="title-left">
+        <div class="eyebrow">Mplify Alliance &middot; Member Summit</div>
+        <div class="title-main">Day 2 - Thu 11 June</div>
+        <div class="title-detail">
+          Three review sessions examining where Mplify's key technology programs stand today &mdash; and what comes next. From autonomous network operations to AI-ready infrastructure and multi-operator federation, this half-day sets the direction for the year ahead.
+        </div>
+      </div>
+
+      
+    </div>
+
+    <!-- SLIDE 2: FULL AGENDA -->
+    <div class="slide" id="slide-2">
+      <div class="slide-eyebrow">Thu 11 Jun 2026 &middot; Lisbon</div>
+      <div class="slide-title">Member Summit &mdash; <span>Mplify Synopsis</span></div>
+      <div class="pill-row">
+        <span class="pill">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          In person &middot; Lisbon, Portugal
+        </span>
+        <span class="pill orange">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Download ICS
+        </span>
+        <span class="pill">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 10l4.553-2.069A1 1 0 0 1 21 8.82v6.36a1 1 0 0 1-1.447.89L15 14"/><rect x="1" y="6" width="14" height="12" rx="2"/></svg>
+          Join Teams Meeting
+        </span>
+      </div>
+
+      <div class="sessions">
+        <div class="session-card s1">
+          <div class="session-header">
+            <span class="session-num">1</span>
+            <span class="session-title session-title-link" onclick="goTo(2)">NaaS Federation</span>
+          </div>
+          <div>
+            <div class="topic-label">Topics</div>
+            <ul class="session-topics">
+              <li>Federation &amp; Supply Chains</li>
+              <li>Cross-Domain Interoperability</li>
+              <li>Test &amp; Certification Framework</li>
+            </ul>
+          </div>
+          <div class="time-block">
+            <div class="time-lisbon">
+              <span class="duration-badge">60 min</span>
+              <span class="time-range">9:00 &ndash; 10:00 am</span>
+            </div>
+            <span class="tz tz-multi">
+              4:00 &ndash; 5:00 am ET<br>
+              10:00 &ndash; 11:00 am CEST<br>
+              4:00 &ndash; 5:00 pm SGT
+            </span>
+          </div>
+        </div>
+
+        <div class="session-card s2">
+          <div class="session-header">
+            <span class="session-num">2</span>
+            <span class="session-title session-title-link" onclick="goTo(3)">NaaS for AI</span>
+          </div>
+          <div>
+            <div class="topic-label">Topics</div>
+            <ul class="session-topics">
+              <li>Inference and Training Use Cases</li>
+              <li>Carrier Ethernet and Wavelengths for AI</li>
+              <li>Data Center &amp; AI Campus Integration</li>
+            </ul>
+          </div>
+          <div class="time-block">
+            <div class="time-lisbon">
+              <span class="duration-badge">60 min</span>
+              <span class="time-range">10:20 &ndash; 11:20 am</span>
+            </div>
+            <span class="tz tz-multi">
+              5:20 &ndash; 6:20 am ET<br>
+              11:20 am &ndash; 12:20 pm CEST<br>
+              5:20 &ndash; 6:20 pm SGT
+            </span>
+          </div>
+        </div>
+
+        <div class="session-card s3">
+          <div class="session-header">
+            <span class="session-num">3</span>
+            <span class="session-title session-title-link" onclick="goTo(4)">Agentic LSO</span>
+          </div>
+          <div>
+            <div class="topic-label">Topics</div>
+            <ul class="session-topics">
+              <li>Architecture and LSO Agent Blueprints</li>
+              <li>Trusted Agents</li>
+              <li>Enterprise Use Cases</li>
+            </ul>
+          </div>
+          <div class="time-block">
+            <div class="time-lisbon">
+              <span class="duration-badge">60 min</span>
+              <span class="time-range">11:40 am &ndash; 12:40 pm</span>
+            </div>
+            <span class="tz tz-multi">
+              6:40 &ndash; 7:40 am ET<br>
+              12:40 &ndash; 1:40 pm CEST<br>
+              6:40 &ndash; 7:40 pm SGT
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SLIDE 3: SESSION 3 DETAIL -->
+    <div class="slide" id="slide-3">
+      <div class="slide-eyebrow">Session 3 &middot; 11:40 am &ndash; 12:40 pm Lisbon</div>
+      <div class="slide-title">Agentic <span>LSO</span></div>
+      <div class="slide-subtitle"><strong>Agentic LSO: Blueprint, Architecture and Trusted Agents</strong><br><br>
+As AI agents move from experimental tools to operational components of the telecom stack, Lifecycle Service Orchestration is poised for its most significant evolution since automation became a standard expectation. This session reviews Mplify's progress and current status on Agentic LSO &mdash; a framework in which AI agents collaborate with deterministic APIs to plan, negotiate, order, and assure NaaS services across providers &mdash; and outlines the path to delivering it safely, accountably, and at scale.<br><br>
+The session opens with an update on Architecture and LSO Agent Blueprints, reporting on the agents now identified across the LSO landscape &mdash; from buyer-side intent translators to seller-side product and assurance agents &mdash; and the patterns being standardised to bind them together. Mplify will share the current state of blueprint definitions giving agents a common structure and contract, and progress on the orchestration models (planner-executor, multi-agent collaboration, human-in-the-loop) that determine how agents coordinate with each other and with the underlying deterministic Sonata and Interlude APIs.<br><br>
+Attention then turns to Trusted Agents, the governance layer without which agentic automation cannot cross commercial boundaries. Mplify will report on work underway in identity and authentication frameworks that give every agent a verifiable legal and operational identity, on the guardrails being defined to constrain agent behaviour within policy and contractual limits, and on the audit trail mechanisms that make every agent decision traceable, reviewable, and defensible &mdash; critical for regulators, auditors, and the operators carrying the commercial risk.<br><br>
+The session closes with a status review of Enterprise Use Cases where agentic LSO is expected to deliver near-term value: NaaS for SMBs, where agents collapse historically uneconomic sales and onboarding cycles; local compliance, where agents continuously interpret evolving regional rules into service configurations; and unified wireless and wireline service delivery, where agents bridge domains that have traditionally been provisioned and assured in silos.</div>
+
+      <div class="detail-grid">
+        <div class="detail-card detail-card-orange">
+          <div class="detail-heading detail-heading-orange">Architecture and LSO Agent Blueprints</div>
+          <ul class="session-topics s1 detail-topics">
+            <li>Required Agents</li>
+            <li>Blueprint Defintion</li>
+            <li>Agent Orchestration</li>
+          </ul>
+        </div>
+        <div class="detail-card detail-card-orange">
+          <div class="detail-heading detail-heading-orange">Trusted Agents</div>
+          <ul class="session-topics s1 detail-topics">
+            <li>Identity &amp; Authentication</li>
+            <li>Guardrails</li>
+            <li>Audit Trails</li>
+          </ul>
+        </div>
+        <div class="detail-card detail-card-orange">
+          <div class="detail-heading detail-heading-orange">Enterprise Use Cases</div>
+          <ul class="session-topics s1 detail-topics">
+            <li>NaaS for SMBs</li>
+            <li>Local Compliance</li>
+            <li>Wireless and Wireline</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- SLIDE 4: SESSION 2 DETAIL -->
+    <div class="slide" id="slide-4">
+      <div class="slide-eyebrow">Session 2 &middot; 10:20 &ndash; 11:20 am Lisbon</div>
+      <div class="slide-title">NaaS for <span>AI</span></div>
+      <div class="slide-subtitle"><strong>NaaS for AI: Network as a Service for AI Workloads</strong><br><br>
+The explosive growth of AI training and inference is reshaping network demand in ways traditional connectivity models were never designed to handle. This session reviews Mplify's progress and current status on evolving NaaS to meet the distinct requirements of AI workloads, across use cases, transport, and physical integration.<br><br>
+The session opens with an update on Inference and Training Use Cases, reporting on the work to distinguish the very different network profiles of distributed training &mdash; with its bursty, east-west, loss-sensitive flows between GPU clusters &mdash; and inference, which is increasingly distributed toward the edge and is reshaping broadband traffic asymmetry. Mplify will share progress on mapping the actors and stakeholders involved, from hyperscalers and neoclouds to enterprises, carriers, and colocation providers, and on translating their needs into concrete network requirements.<br><br>
+Attention then turns to Carrier Ethernet and Wavelengths for AI, the transport foundation for AI connectivity. Mplify will report on performance tiers being defined for AI workloads, on work underway to incorporate quantum-secure connectivity (PQC and QKD) for protecting model weights and training data in transit, and on the NaaS attributes &mdash; bandwidth elasticity, deterministic performance, on-demand provisioning &mdash; that operators must expose through standardized products and LSO APIs.<br><br>
+The session closes with a status review of Data Center and AI Campus Integration, the often-overlooked physical and operational layer where AI economics are won or lost. Updates will cover cross connects and IP peering inside and between AI campuses, progress on electronic Letters of Authorization (eLOAs) to accelerate provisioning across facility boundaries, and the work mapping how operators are refitting central offices and metro footprints to host AI infrastructure closer to data sources and end users.</div>
+
+      <div class="detail-grid">
+        <div class="detail-card detail-card-blue">
+          <div class="detail-heading detail-heading-blue">Inference and Training Use Cases</div>
+          <ul class="session-topics s2 detail-topics">
+            <li>Inference vs Training</li>
+            <li>Actors and Stakeholders</li>
+            <li>Network Requirements</li>
+          </ul>
+        </div>
+        <div class="detail-card detail-card-blue">
+          <div class="detail-heading detail-heading-blue">Carrier Ethernet and Wavelengths for AI</div>
+          <ul class="session-topics s2 detail-topics">
+            <li>Performance Tiers</li>
+            <li>Quantum Secure</li>
+            <li>NaaS Attributes</li>
+          </ul>
+        </div>
+        <div class="detail-card detail-card-blue">
+          <div class="detail-heading detail-heading-blue">Data Center &amp; AI Campus Integration</div>
+          <ul class="session-topics s2 detail-topics">
+            <li>Cross Connects and IP Peering</li>
+            <li>eLOAs</li>
+            <li>Refitting Central Offices</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- SLIDE 5: SESSION 1 DETAIL -->
+    <div class="slide" id="slide-5">
+      <div class="slide-eyebrow">Session 1 &middot; 9:00 &ndash; 10:00 am Lisbon</div>
+      <div class="slide-title">NaaS <span>Federation</span></div>
+      <div class="slide-subtitle"><strong>Building the Foundations of Federated NaaS: Standards, Interoperability, and Trust</strong><br><br>
+Network as a Service is moving from single-provider offerings to federated, multi-operator ecosystems that span regions, technologies, and commercial boundaries. This session reviews Mplify's progress and current status across the three foundational pillars enabling that shift.<br><br>
+The session opens with an update on Federation and Supply Chains, reporting on the use cases now documented where buyers and sellers transact dynamically across operator boundaries, the governance models being shaped to make federation commercially viable, and progress on decentralized trust networks that establish identity, accountability, and settlement between parties that may have no prior relationship.<br><br>
+Attention then turns to Cross-Domain Interoperability, the technical layer that makes federation executable. Mplify will report on the current state of standardized product and service definitions giving every participant a common vocabulary, and on the latest releases of LSO (Lifecycle Service Orchestration) APIs providing the machine-to-machine interfaces for quoting, ordering, activating, and assuring services across domains &mdash; shrinking integration cycles from months to days.<br><br>
+The session closes with a status review of the Test and Certification Framework that underpins market confidence. Mplify will share progress across certification programs spanning connectivity services, SD-WAN and cybersecurity, and LSO API conformance &mdash; giving buyers assurance that certified products behave predictably and that certified APIs interoperate out of the box.</div>
+
+      <div class="detail-grid">
+        <div class="detail-card detail-card-dkblue">
+          <div class="detail-heading detail-heading-dkblue">Federation &amp; Supply Chains</div>
+          <ul class="session-topics s3 detail-topics">
+            <li>Use Cases</li>
+            <li>Governance</li>
+            <li>Decentralized Trust Networks</li>
+          </ul>
+        </div>
+        <div class="detail-card detail-card-dkblue">
+          <div class="detail-heading detail-heading-dkblue">Cross-Domain Interoperability</div>
+          <ul class="session-topics s3 detail-topics">
+            <li>Standardized Products and Services</li>
+            <li>LSO APIs</li>
+          </ul>
+        </div>
+        <div class="detail-card detail-card-dkblue">
+          <div class="detail-heading detail-heading-dkblue">Test &amp; Certification Framework</div>
+          <ul class="session-topics s3 detail-topics">
+            <li>Connectivity Services</li>
+            <li>SD-WAN and Cybersecurity</li>
+            <li>LSO APIs</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /stage -->
+  <div class="gradient-bar"></div>
+</div><!-- /main -->
+
+<script>
+const slides = Array.from(document.querySelectorAll('.slide'));
+const slideOrder = ['slide-1', 'slide-2', 'slide-5', 'slide-4', 'slide-3'];
+const orderedSlides = slideOrder
+  .map(id => document.getElementById(id))
+  .filter(Boolean);
+const chapterItems = document.querySelectorAll('.chapter-item');
+const counter = document.getElementById('counter');
+let current = 0;
+
+function updateUI() {
+  slides.forEach(s => s.classList.remove('active'));
+  if (orderedSlides[current]) orderedSlides[current].classList.add('active');
+  chapterItems.forEach((c, i) => c.classList.toggle('active', i === current));
+  counter.textContent = (current + 1) + ' / ' + orderedSlides.length;
+}
+function goTo(n) {
+  current = Math.max(0, Math.min(orderedSlides.length - 1, n));
+  updateUI();
+}
+function nextSlide() { goTo(current + 1); }
+function prevSlide() { goTo(current - 1); }
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'ArrowRight' || e.key === 'ArrowDown') nextSlide();
+  if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   prevSlide();
+});
+
+updateUI();
+</script>
+</body>
+</html>
