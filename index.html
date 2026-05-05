@@ -17,6 +17,8 @@
   --charcoal: #555555;
   --light:    #F0F1F2;
   --white:    #FFFFFF;
+  /* Same pixel height on all session detail slides (not % of grid — subtitle varies by slide). */
+  --session-detail-card-height: clamp(300px, 46vh, 460px);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -275,6 +277,55 @@ body {
 .tz { font-size: 11px; color: var(--gray); margin-top: 3px; display: block; }
 .tz-multi { font-size: 9.5px; line-height: 1.35; }
 
+/* Slide 2 compact card layout */
+#slide-2 .slide-title { margin-bottom: 22px; }
+#slide-2 .sessions { flex: 0; align-items: stretch; margin-top: 18px; margin-bottom: auto; }
+#slide-2 .session-card { padding: 16px 16px 12px; gap: 8px; }
+#slide-2 .session-card { height: 360px; }
+#slide-2 .session-topics { gap: 3px; }
+#slide-2 .session-topics li { font-size: 11.5px; line-height: 1.25; }
+#slide-2 .tz-multi { font-size: 8.5px; line-height: 1.2; }
+
+#slide-3 .slide-subtitle,
+#slide-4 .slide-subtitle,
+#slide-5 .slide-subtitle {
+  font-size: 14px;
+  line-height: 1.35;
+}
+
+#slide-3 .slide-subtitle strong,
+#slide-4 .slide-subtitle strong,
+#slide-5 .slide-subtitle strong {
+  font-size: 21px; /* 14px * 1.5 */
+  line-height: 1.2;
+  display: block;
+}
+
+#slide-3 .detail-grid,
+#slide-4 .detail-grid,
+#slide-5 .detail-grid {
+  align-items: end;
+}
+#slide-3 .detail-card,
+#slide-4 .detail-card,
+#slide-5 .detail-card {
+  height: var(--session-detail-card-height);
+  overflow: auto;
+}
+
+/* Slides 3–5: 50% larger card typography */
+#slide-3 .detail-heading,
+#slide-4 .detail-heading,
+#slide-5 .detail-heading {
+  font-size: 15px; /* 10px * 1.5 */
+}
+#slide-3 .detail-topics li,
+#slide-4 .detail-topics li,
+#slide-5 .detail-topics li {
+  font-size: 15px;
+  line-height: 1.35;
+}
+
 .footer-note {
   margin-top: 14px; font-size: 10.5px; color: var(--gray);
   border-top: 1px solid #e0e3e9; padding-top: 12px;
@@ -360,10 +411,10 @@ body {
     <div class="logo-sub text-center">Member Summit · Lisbon 2026</div>
   </div>
   <div class="chapter-item active" onclick="goTo(0)">
-    <span class="chapter-number">—</span> Cover
+    <span class="chapter-number">—</span> Summit Day 2
   </div>
   <div class="chapter-item" onclick="goTo(1)">
-    <span class="chapter-number">1</span> Second Day
+    <span class="chapter-number">1</span> Mplify Synopsis
   </div>
   <div class="chapter-item" onclick="goTo(2)">
     <span class="chapter-number">2</span> NaaS Federation
@@ -399,7 +450,7 @@ body {
     <!-- SLIDE 2: FULL AGENDA -->
     <div class="slide" id="slide-2">
       <div class="slide-eyebrow">Thu 11 Jun 2026 &middot; Lisbon</div>
-      <div class="slide-title">Member Summit &mdash; <span>Second Day</span></div>
+      <div class="slide-title">Member Summit &mdash; <span>Mplify Synopsis</span></div>
       <div class="pill-row">
         <span class="pill">
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
@@ -425,9 +476,8 @@ body {
             <div class="topic-label">Topics</div>
             <ul class="session-topics">
               <li>Federation &amp; Supply Chains</li>
-              <li>Test &amp; Certification Framework</li>
               <li>Cross-Domain Interoperability</li>
-              <li>Decisions &amp; Next Steps</li>
+              <li>Test &amp; Certification Framework</li>
             </ul>
           </div>
           <div class="time-block">
@@ -451,10 +501,9 @@ body {
           <div>
             <div class="topic-label">Topics</div>
             <ul class="session-topics">
-              <li>Network as a Service for AI Workloads</li>
-              <li>Architecture &amp; Requirements</li>
+              <li>Inference and Training Use Cases</li>
+              <li>Carrier Ethernet and Wavelengths for AI</li>
               <li>Data Center &amp; AI Campus Integration</li>
-              <li>Roadmap &amp; Priorities</li>
             </ul>
           </div>
           <div class="time-block">
@@ -478,10 +527,9 @@ body {
           <div>
             <div class="topic-label">Topics</div>
             <ul class="session-topics">
-              <li>Blueprint &amp; Architecture</li>
-              <li>Key Components &amp; Terminology</li>
+              <li>Architecture and LSO Agent Blueprints</li>
               <li>Trusted Agents</li>
-              <li>Use Case Opportunities</li>
+              <li>Enterprise Use Cases</li>
             </ul>
           </div>
           <div class="time-block">
@@ -504,34 +552,35 @@ body {
     <div class="slide" id="slide-3">
       <div class="slide-eyebrow">Session 3 &middot; 11:40 am &ndash; 12:40 pm Lisbon</div>
       <div class="slide-title">Agentic <span>LSO</span></div>
-      <div class="slide-subtitle">Blueprint, Architecture &amp; Trusted Agents</div>
+      <div class="slide-subtitle"><strong>Agentic LSO: Blueprint, Architecture and Trusted Agents</strong><br><br>
+As AI agents move from experimental tools to operational components of the telecom stack, Lifecycle Service Orchestration is poised for its most significant evolution since automation became a standard expectation. This session reviews Mplify's progress and current status on Agentic LSO &mdash; a framework in which AI agents collaborate with deterministic APIs to plan, negotiate, order, and assure NaaS services across providers &mdash; and outlines the path to delivering it safely, accountably, and at scale.<br><br>
+The session opens with an update on Architecture and LSO Agent Blueprints, reporting on the agents now identified across the LSO landscape &mdash; from buyer-side intent translators to seller-side product and assurance agents &mdash; and the patterns being standardised to bind them together. Mplify will share the current state of blueprint definitions giving agents a common structure and contract, and progress on the orchestration models (planner-executor, multi-agent collaboration, human-in-the-loop) that determine how agents coordinate with each other and with the underlying deterministic Sonata and Interlude APIs.<br><br>
+Attention then turns to Trusted Agents, the governance layer without which agentic automation cannot cross commercial boundaries. Mplify will report on work underway in identity and authentication frameworks that give every agent a verifiable legal and operational identity, on the guardrails being defined to constrain agent behaviour within policy and contractual limits, and on the audit trail mechanisms that make every agent decision traceable, reviewable, and defensible &mdash; critical for regulators, auditors, and the operators carrying the commercial risk.<br><br>
+The session closes with a status review of Enterprise Use Cases where agentic LSO is expected to deliver near-term value: NaaS for SMBs, where agents collapse historically uneconomic sales and onboarding cycles; local compliance, where agents continuously interpret evolving regional rules into service configurations; and unified wireless and wireline service delivery, where agents bridge domains that have traditionally been provisioned and assured in silos.</div>
 
       <div class="detail-grid">
         <div class="detail-card detail-card-orange">
-          <div class="detail-heading detail-heading-orange">Blueprint &amp; Architecture</div>
+          <div class="detail-heading detail-heading-orange">Architecture and LSO Agent Blueprints</div>
           <ul class="session-topics s1 detail-topics">
-            <li>Key components overview</li>
-            <li>Terminology alignment</li>
-            <li>Harness engineering</li>
-            <li>Standardized product models</li>
-            <li>Domain specific languages</li>
+            <li>Required Agents</li>
+            <li>Blueprint Defintion</li>
+            <li>Agent Orchestration</li>
           </ul>
         </div>
         <div class="detail-card detail-card-orange">
           <div class="detail-heading detail-heading-orange">Trusted Agents</div>
           <ul class="session-topics s1 detail-topics">
+            <li>Identity &amp; Authentication</li>
             <li>Guardrails</li>
-            <li>Identity &amp; authentication</li>
-            <li>Audit trails</li>
-            <li>Agent orchestration</li>
+            <li>Audit Trails</li>
           </ul>
         </div>
         <div class="detail-card detail-card-orange">
-          <div class="detail-heading detail-heading-orange">Use Case Opportunities</div>
+          <div class="detail-heading detail-heading-orange">Enterprise Use Cases</div>
           <ul class="session-topics s1 detail-topics">
-            <li>Brainstorming &amp; ideation</li>
-            <li>Member-submitted scenarios</li>
-            <li>Decisions &amp; wrap-up</li>
+            <li>NaaS for SMBs</li>
+            <li>Local Compliance</li>
+            <li>Wireless and Wireline</li>
           </ul>
         </div>
       </div>
@@ -542,27 +591,35 @@ body {
     <div class="slide" id="slide-4">
       <div class="slide-eyebrow">Session 2 &middot; 10:20 &ndash; 11:20 am Lisbon</div>
       <div class="slide-title">NaaS for <span>AI</span></div>
-      <div class="slide-subtitle">Network as a Service for AI Workloads</div>
+      <div class="slide-subtitle"><strong>NaaS for AI: Network as a Service for AI Workloads</strong><br><br>
+The explosive growth of AI training and inference is reshaping network demand in ways traditional connectivity models were never designed to handle. This session reviews Mplify's progress and current status on evolving NaaS to meet the distinct requirements of AI workloads, across use cases, transport, and physical integration.<br><br>
+The session opens with an update on Inference and Training Use Cases, reporting on the work to distinguish the very different network profiles of distributed training &mdash; with its bursty, east-west, loss-sensitive flows between GPU clusters &mdash; and inference, which is increasingly distributed toward the edge and is reshaping broadband traffic asymmetry. Mplify will share progress on mapping the actors and stakeholders involved, from hyperscalers and neoclouds to enterprises, carriers, and colocation providers, and on translating their needs into concrete network requirements.<br><br>
+Attention then turns to Carrier Ethernet and Wavelengths for AI, the transport foundation for AI connectivity. Mplify will report on performance tiers being defined for AI workloads, on work underway to incorporate quantum-secure connectivity (PQC and QKD) for protecting model weights and training data in transit, and on the NaaS attributes &mdash; bandwidth elasticity, deterministic performance, on-demand provisioning &mdash; that operators must expose through standardized products and LSO APIs.<br><br>
+The session closes with a status review of Data Center and AI Campus Integration, the often-overlooked physical and operational layer where AI economics are won or lost. Updates will cover cross connects and IP peering inside and between AI campuses, progress on electronic Letters of Authorization (eLOAs) to accelerate provisioning across facility boundaries, and the work mapping how operators are refitting central offices and metro footprints to host AI infrastructure closer to data sources and end users.</div>
 
       <div class="detail-grid">
         <div class="detail-card detail-card-blue">
-          <div class="detail-heading detail-heading-blue">NaaS Foundations</div>
+          <div class="detail-heading detail-heading-blue">Inference and Training Use Cases</div>
           <ul class="session-topics s2 detail-topics">
-            <li>Network as a Service for AI workloads</li>
-            <li>Architecture &amp; requirements</li>
+            <li>Inference vs Training</li>
+            <li>Actors and Stakeholders</li>
+            <li>Network Requirements</li>
           </ul>
         </div>
         <div class="detail-card detail-card-blue">
-          <div class="detail-heading detail-heading-blue">Infrastructure Scope</div>
+          <div class="detail-heading detail-heading-blue">Carrier Ethernet and Wavelengths for AI</div>
           <ul class="session-topics s2 detail-topics">
-            <li>Data center &amp; AI campus integration</li>
+            <li>Performance Tiers</li>
+            <li>Quantum Secure</li>
+            <li>NaaS Attributes</li>
           </ul>
         </div>
         <div class="detail-card detail-card-blue">
-          <div class="detail-heading detail-heading-blue">Roadmap</div>
+          <div class="detail-heading detail-heading-blue">Data Center &amp; AI Campus Integration</div>
           <ul class="session-topics s2 detail-topics">
-            <li>Roadmap &amp; priorities</li>
-            <li>Decisions</li>
+            <li>Cross Connects and IP Peering</li>
+            <li>eLOAs</li>
+            <li>Refitting Central Offices</li>
           </ul>
         </div>
       </div>
@@ -572,26 +629,34 @@ body {
     <div class="slide" id="slide-5">
       <div class="slide-eyebrow">Session 1 &middot; 9:00 &ndash; 10:00 am Lisbon</div>
       <div class="slide-title">NaaS <span>Federation</span></div>
-      <div class="slide-subtitle">Interoperability, Certification &amp; Next Steps</div>
+      <div class="slide-subtitle"><strong>Building the Foundations of Federated NaaS: Standards, Interoperability, and Trust</strong><br><br>
+Network as a Service is moving from single-provider offerings to federated, multi-operator ecosystems that span regions, technologies, and commercial boundaries. This session reviews Mplify's progress and current status across the three foundational pillars enabling that shift.<br><br>
+The session opens with an update on Federation and Supply Chains, reporting on the use cases now documented where buyers and sellers transact dynamically across operator boundaries, the governance models being shaped to make federation commercially viable, and progress on decentralized trust networks that establish identity, accountability, and settlement between parties that may have no prior relationship.<br><br>
+Attention then turns to Cross-Domain Interoperability, the technical layer that makes federation executable. Mplify will report on the current state of standardized product and service definitions giving every participant a common vocabulary, and on the latest releases of LSO (Lifecycle Service Orchestration) APIs providing the machine-to-machine interfaces for quoting, ordering, activating, and assuring services across domains &mdash; shrinking integration cycles from months to days.<br><br>
+The session closes with a status review of the Test and Certification Framework that underpins market confidence. Mplify will share progress across certification programs spanning connectivity services, SD-WAN and cybersecurity, and LSO API conformance &mdash; giving buyers assurance that certified products behave predictably and that certified APIs interoperate out of the box.</div>
 
       <div class="detail-grid">
         <div class="detail-card detail-card-dkblue">
-          <div class="detail-heading detail-heading-dkblue">Federation Scope</div>
+          <div class="detail-heading detail-heading-dkblue">Federation &amp; Supply Chains</div>
           <ul class="session-topics s3 detail-topics">
-            <li>Federation &amp; supply chains</li>
+            <li>Use Cases</li>
+            <li>Governance</li>
+            <li>Decentralized Trust Networks</li>
           </ul>
         </div>
         <div class="detail-card detail-card-dkblue">
-          <div class="detail-heading detail-heading-dkblue">Assurance Framework</div>
+          <div class="detail-heading detail-heading-dkblue">Cross-Domain Interoperability</div>
           <ul class="session-topics s3 detail-topics">
-            <li>Test &amp; certification framework</li>
-            <li>Cross-domain interoperability</li>
+            <li>Standardized Products and Services</li>
+            <li>LSO APIs</li>
           </ul>
         </div>
         <div class="detail-card detail-card-dkblue">
-          <div class="detail-heading detail-heading-dkblue">Alignment Outcomes</div>
+          <div class="detail-heading detail-heading-dkblue">Test &amp; Certification Framework</div>
           <ul class="session-topics s3 detail-topics">
-            <li>Decisions &amp; next steps</li>
+            <li>Connectivity Services</li>
+            <li>SD-WAN and Cybersecurity</li>
+            <li>LSO APIs</li>
           </ul>
         </div>
       </div>
